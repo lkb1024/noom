@@ -101,22 +101,14 @@ function handleCameraClick() {
 
 async function handleCameraChange() {
     await getMedia(cameraSelect.value);
-    console.log("camera changed")
     if(myPeerConnection) {
         const videoTrack = myStream.getVideoTracks()[0]
-        const videoSender = myPeerConnection.getSenders().find(sender =>{
-            sender.track.kind === "video"
-        });
-        socket.emit("camera-changed", videoTrack)
-        socket.emit("camera-changed", myPeerConnection.getSenders())
-        // videoSender.replaceTrack(videoTrack);
+        const videoSender = myPeerConnection.getSenders().find(sender =>
+             sender.track.kind === "video"
+        );
+        videoSender.replaceTrack(videoTrack);
     }
 }
-
-socket.on("camera-changed", (sender)=>{
-    console.log(sender);
-})
-
 
 muteBtn.addEventListener("click", handleMuteClick);
 cameraBtn.addEventListener("click", handleCameraClick);

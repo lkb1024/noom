@@ -29,9 +29,6 @@ wsServer.on("connection", socket =>{
     socket.on("ice", (ice, roomName) => {
         socket.to(roomName).emit("ice", ice)
     })
-    socket.on("camera-changed", (sender)=>{
-        socket.to(roomName).emit("camera-changed", sender)
-    })
 })
 
 
