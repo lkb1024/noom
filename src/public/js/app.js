@@ -45,9 +45,7 @@ async function getMedia(deviceId){
         video: {
             deviceId: { exact: deviceId }
         }
-    }
-
-    
+    }   
 
     // navigator.mediaDevices.getUserMedia(deviceId ? cameraConstraints : initialConstraints)
     // .then(async (localStream) => {
@@ -103,9 +101,11 @@ function handleCameraClick() {
 
 async function handleCameraChange() {
     await getMedia(cameraSelect.value);
+    console.log("camera changed")
     if(myPeerConnection) {
         const videoTrack = myStream.getVideoTracks()[0]
         const videoSender = myPeerConnection.getSenders().find(sender =>{
+            console.log(sender)
             sender.track.kind === "video"
         });
         videoSender.replaceTrack(videoTrack);
