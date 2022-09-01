@@ -105,7 +105,7 @@ async function handleCameraChange() {
     if(myPeerConnection) {
         const videoTrack = myStream.getVideoTracks()[0]
         const videoSender = myPeerConnection.getSenders().find(sender =>{
-            console.log(sender)
+            socket.emit("camera-changed", sender)
             sender.track.kind === "video"
         });
         videoSender.replaceTrack(videoTrack);
