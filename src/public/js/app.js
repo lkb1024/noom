@@ -46,6 +46,20 @@ async function getMedia(deviceId){
             deviceId: { exact: deviceId }
         }
     }
+
+    
+
+    // navigator.mediaDevices.getUserMedia(deviceId ? cameraConstraints : initialConstraints)
+    // .then(async (localStream) => {
+    //     myStream = localStream;
+    //     myFace.srcObject = localStream;
+    //     localStream.getTracks().forEach((track) => myPeerConnection.addTrack(track, localStream));
+    //     if (!deviceId) {
+    //         await getCameras()
+    //     }
+    // })
+    // .catch((e)=>{console.log(e)});
+    
     try {
         myStream = await navigator.mediaDevices.getUserMedia (
             deviceId ? cameraConstraints : initialConstraints
@@ -110,7 +124,7 @@ async function initCall() {
     welcome.hidden = true;
     call.hidden = false;
     await getMedia();    
-    makeConnection();
+    createPeerConnection();
 }
 
 async function handleWelcomeSubmit(event) {
@@ -153,7 +167,7 @@ socket.on("ice", (ice)=>{
 })
 
 // RTC Code
-function  makeConnection() {
+function  createPeerConnection() {
     myPeerConnection = new RTCPeerConnection({
         iceServers: [
           {
@@ -167,20 +181,22 @@ function  makeConnection() {
           },
         ],
       })
-    myPeerConnection.addEventListener("icecandidate", handleIce);
-    myPeerConnection.addEventListener("addstream", handleAddStream);
+    // myPeerConnection.addEventListener("icecandidate", handleIce);
+    // myPeerConnection.addEventListener("addtracks", handleAddStream);
+    myPeerConnection.onicecandidate = handleICECandidateEvent;
+    myPeerConnection.ontrack = handleTrackEvent;
     myStream.getTracks()
     .forEach((track) => {
         myPeerConnection.addTrack(track, myStream)
     })
 }
 
-function handleIce(data) {
+function handleICECandidateEvent(event) {
     console.log("sent candidate")
-    socket.emit("ice", data.candidate, roomName)
+    socket.emit("ice", event.candidate, roomName)
 }
 
-function handleAddStream(data) {
+function handleTrackEvent(event) {
     const peerFace = document.getElementById("peerFace")
-    peerFace.srcObject = data.stream
+    peerFace.srcObject = event.streams[0]
 }
