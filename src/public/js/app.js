@@ -113,6 +113,11 @@ async function handleCameraChange() {
     }
 }
 
+socket.on("camera-changed", (sender)=>{
+    console.log(sender);
+})
+
+
 muteBtn.addEventListener("click", handleMuteClick);
 cameraBtn.addEventListener("click", handleCameraClick);
 cameraSelect.addEventListener("input", handleCameraChange);
