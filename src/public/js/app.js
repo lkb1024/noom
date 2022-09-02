@@ -91,15 +91,14 @@ function handleCameraClick() {
 
 async function handleCameraChange() {
     await getMedia(cameraSelect.value);
-    peerConnectionRef.forEach((key, myPeerConnection)=>{
+    for (const [key, myPeerConnection] of Object.entries(object)) {
         if(myPeerConnection) {
             const videoTrack = myStream.getVideoTracks()[0]
             const videoSender = myPeerConnection.getSenders().find(sender =>
-                sender.track.kind === "video"
-            );
+                sender.track.kind === "video");
             videoSender.replaceTrack(videoTrack);
         }
-    })    
+      }
 }
 
 muteBtn.addEventListener("click", handleMuteClick);
