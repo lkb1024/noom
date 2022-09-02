@@ -91,7 +91,7 @@ function handleCameraClick() {
 
 async function handleCameraChange() {
     await getMedia(cameraSelect.value);
-    for (const [key, myPeerConnection] of Object.entries(object)) {
+    for (const [key, myPeerConnection] of Object.entries(peerConnectionRef)) {
         if(myPeerConnection) {
             const videoTrack = myStream.getVideoTracks()[0]
             const videoSender = myPeerConnection.getSenders().find(sender =>
