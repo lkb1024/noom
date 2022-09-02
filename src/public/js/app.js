@@ -3,13 +3,13 @@ const socket = io();
 const myFace = document.getElementById("myFace");
 const muteBtn = document.getElementById("mute");
 const cameraBtn = document.getElementById("camera");
-const cameraSelect = document.getElementById("cameras");
+// const cameraSelect = document.getElementById("cameras");
 const call = document.getElementById("call")
  
 call.hidden = true
 
 let myStream;
-let muted = false;
+let muted = true;
 let cameraOff = false;
 let roomName;
 let peerConnectionRef = {}
@@ -27,7 +27,7 @@ async function getCameras() {
             if(currentCamera.label === camera.label) {
                 option.selected = true;
             }
-            cameraSelect.appendChild(option)
+            // cameraSelect.appendChild(option)
         })
     } catch(e) {
         console.log(e);
@@ -36,13 +36,13 @@ async function getCameras() {
 
 async function getMedia(deviceId){
     const initialConstraints = {
-        audio: true,
+        audio: false,
         video: {
           facingMode: { facingMode: "user" }
         }
       }
     const cameraConstraints = {
-        audio: true,
+        audio: false,
         video: {
             deviceId: { exact: deviceId }
         }
@@ -98,12 +98,12 @@ async function handleCameraChange() {
                 sender.track.kind === "video");
             videoSender.replaceTrack(videoTrack);
         }
-      }
+    }
 }
 
 muteBtn.addEventListener("click", handleMuteClick);
 cameraBtn.addEventListener("click", handleCameraClick);
-cameraSelect.addEventListener("input", handleCameraChange);
+// cameraSelect.addEventListener("input", handleCameraChange);
 
 // Welcome Form (join a room)
 const welcome = document.getElementById("welcome")
